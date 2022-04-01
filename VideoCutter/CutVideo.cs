@@ -1,6 +1,7 @@
 ﻿using FFmpeg.NET;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -32,7 +33,8 @@ namespace ConsoleApp1
 
             if (inputFile != null)
             {
-                var ffmpeg = new Engine("C:\\ffmpeg\\bin\\ffmpeg.exe");
+                var enginePath = ConfigurationManager.AppSettings.Get("EnginePath");
+                var ffmpeg = new Engine($"{enginePath}\\ffmpeg.exe");
                 var options = new ConversionOptions();
                 Regex r = new Regex(@"(\d\d):(\d\d):(\d\d),(\d\d\d)");
 

@@ -16,7 +16,7 @@ namespace ConsoleApp1
         public string BuildDialoge(int position, List<KeyValuePair<string, string>> subs)
         {
             string dialoge = "";
-            int total = subs.Count;
+            //int total = subs.Count;
             int begin = position - 5;
             int end = position + 5;
 

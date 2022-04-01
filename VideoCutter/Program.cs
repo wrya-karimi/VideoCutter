@@ -1,6 +1,7 @@
 ﻿using FFmpeg.NET;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -102,10 +103,11 @@ namespace ConsoleApp1
             if (lstSubtitle.Count > 0)
             {
                 var file = new FileManager();
-
                 List<string> textsList = new List<string>();
                 string path = key.Replace(",", "").Replace("?", "").Replace("!", "").Replace(".", "").Replace("'", "").Trim();
-                string outputPath = $"D:\\output\\{path}\\";
+                int secondsOfSleep = int.Parse(ConfigurationManager.AppSettings.Get("SecondsOfSleepAfterEachCut"));
+                string outputDirectory = ConfigurationManager.AppSettings.Get("OutputDirectory");
+                string outputPath = $"{outputDirectory}\\{path}\\";
                 file.MakeDirectory(outputPath);
                 Console.WriteLine($"{lstSubtitle.Count} items found");
                 Console.WriteLine("Start Cutting videos...");
@@ -115,13 +117,12 @@ namespace ConsoleApp1
                     Console.WriteLine($"#{i+1}");
                     //if (item.Title.Split(' ').Where(x => x.ToLower().Equals(key.ToLower())).Count() > 0)
                     {
-                        Thread.Sleep(2000);
                         (new CutVideo()).ClipVideo(item, outputPath);
                         textsList.Add(item.FileAddress);
                         textsList.Add(item.Time);
                         textsList.Add(item.Title);
                         textsList.Add("* * * * * * * *");
-                        Thread.Sleep(10000);
+                        Thread.Sleep(secondsOfSleep * 1000);
                     }
                 }
                 file.SaveText(textsList, $"{outputPath}\\{path}.txt");
