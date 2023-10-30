@@ -1,32 +1,48 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApp1
+namespace VideoCutter
 {
     public class FileManager
     {
+        private Logger logger = NLog.LogManager.GetCurrentClassLogger();
         public void MakeDirectory(string path)
         {
-            if (!Directory.Exists(path))
+            try
             {
-                Directory.CreateDirectory(path);
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
             }
         }
         public void SaveText(List<string> text, string path)
         {
-            if (!File.Exists(path))
+            try
             {
-                using (StreamWriter sw = File.CreateText(path))
+                if (!File.Exists(path))
                 {
-                    foreach (var txt in text)
+                    using (StreamWriter sw = File.CreateText(path))
                     {
-                        sw.WriteLine(txt);
+                        foreach (var txt in text)
+                        {
+                            sw.WriteLine(txt);
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
             }
         }
     }
